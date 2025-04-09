@@ -13,6 +13,10 @@ RSpec.describe "Users", type: :request do
       5.times do
         create(:user, company: company_2)
       end
+      create(:user, username: 'user1_1')
+      create(:user, username: 'user1_2')
+      create(:user, username: 'user2_1')
+      create(:user, username: 'user2_2')
     end
   end
 
@@ -30,11 +34,13 @@ RSpec.describe "Users", type: :request do
       end
     end
 
-    context 'when fetching all users' do
+    context 'when filtering by username with partial match' do
       include_context 'with multiple companies'
 
-      it 'returns all the users' do
-
+      it 'returns users with matching username' do
+        get users_path(username: 'user1')
+        
+        expect(result.size).to eq(2)
       end
     end
   end
